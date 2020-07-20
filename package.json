@@ -1,0 +1,15 @@
+{
+  "name": "loldesign-telzir",
+  "version": "1.0.0",
+  "private": true,
+  "repository": "git@github.com:vitor-adriano/loldesign-telzir.git",
+  "author": "Vitor Adriano Savedra <v4savedra.dev@outlook.com>",
+  "license": "MIT",
+  "workspaces": [
+    "server"
+  ],
+  "scripts": {
+    "server:run": "yarn workspace server start",
+    "server:dev": "yarn workspace server watch"
+  }
+}
