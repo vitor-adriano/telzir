@@ -4,7 +4,10 @@ module.exports = {
   login: async (req, res) => {
     const { email, password } = req.body
 
-    const user = await db('users').where({ email, password }).first()
+    const user = await db('users')
+      .select('id', 'name', 'email', 'plan_id')
+      .where({ email, password })
+      .first()
 
     if (!user) {
       return res.status(404).json({
@@ -12,13 +15,10 @@ module.exports = {
       })
     }
 
+    return res.json(user)
+
     res.json({
-      data: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        current_plan: user.current_plan,
-      },
+      data: user,
     })
   },
 
