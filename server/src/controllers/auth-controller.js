@@ -14,6 +14,7 @@ module.exports = {
 
     res.json({
       data: {
+        id: user.id,
         name: user.name,
         email: user.email,
         current_plan: user.current_plan,
