@@ -9,6 +9,8 @@
     "server"
   ],
   "scripts": {
+    "db:migrate": "yarn workspace server migrate",
+    "db:seed": "yarn workspace server seed",
     "server:run": "yarn workspace server start",
     "server:dev": "yarn workspace server watch"
   }
