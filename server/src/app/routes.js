@@ -1,5 +1,7 @@
 const express = require('express')
 
+const mw = require('../middlewares')
+
 const authController = require('../controllers/auth-controller')
 const planController = require('../controllers/plan-controller')
 const tariffController = require('../controllers/tariff-controller')
@@ -10,11 +12,11 @@ const route = express()
 route.post('/register', authController.register)
 route.post('/login', authController.login)
 
-route.get('/plans', planController.index)
+route.get('/plans', mw.auth, planController.index)
 
-route.get('/tariffs', tariffController.index)
+route.get('/tariffs', mw.auth, tariffController.index)
 
-route.put('/update', userController.update)
-route.put('/update-plan', userController.updatePlan)
+route.put('/update', mw.auth, userController.update)
+route.put('/update-plan', mw.auth, userController.updatePlan)
 
 module.exports = route
