@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const User = require('../models/user')
 
 module.exports = {
@@ -5,14 +7,21 @@ module.exports = {
     const { email, password } = req.body
 
     try {
-      const user = await new User().where({ email, password }).fetch({
+      const user = await new User().where({ email }).fetch({
         withRelated: ['plan'],
       })
 
-      return res.json(user)
+      const validPassword = await bcrypt.compare(
+        password,
+        user.attributes.password
+      )
+
+      if (!validPassword) throw new Error()
+
+      return res.send(jwt.sign(user.omit(['password']), process.env.APP_KEY))
     } catch (e) {
       return res.status(404).json({
-        message: 'Conta não encontrada.',
+        message: 'E-mail ou senha incorretos.',
       })
     }
   },
