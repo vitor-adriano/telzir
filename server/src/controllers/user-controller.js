@@ -1,10 +1,10 @@
-const db = require('../app/database')
+const User = require('../models/user')
 
 module.exports = {
   update: async (req, res) => {
     const { id, name, email, password } = req.body
 
-    await db('users').where({ id }).update({ name, email, password })
+    await new User({ id }).save({ name, email, password })
 
     return res.sendStatus(200)
   },
@@ -12,7 +12,7 @@ module.exports = {
   updatePlan: async (req, res) => {
     const { id, plan_id } = req.body
 
-    await db('users').where({ id }).update({ plan_id })
+    await new User({ id }).save({ plan_id })
 
     return res.sendStatus(200)
   },

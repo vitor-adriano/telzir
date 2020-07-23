@@ -1,10 +1,10 @@
-const db = require('../app/database')
+const Tariff = require('../models/tariff')
 
 module.exports = {
   index: async (req, res) => {
-    const tariffs = await db('tariffs')
+    const tariffs = await new Tariff().fetchAll()
 
-    res.json({
+    return res.json({
       data: tariffs,
     })
   },

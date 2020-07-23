@@ -4,7 +4,7 @@ module.exports.up = knex => {
     table.string('name').notNullable()
     table.string('email').notNullable().unique()
     table.string('password').notNullable()
-    table.string('plan_id').unsigned()
+    table.integer('plan_id').unsigned().nullable()
 
     table.foreign('plan_id').references('id').inTable('plans')
   })

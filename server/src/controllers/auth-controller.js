@@ -1,40 +1,33 @@
-const db = require('../app/database')
+const User = require('../models/user')
 
 module.exports = {
   login: async (req, res) => {
     const { email, password } = req.body
 
-    const user = await db('users')
-      .select('id', 'name', 'email', 'plan_id')
-      .where({ email, password })
-      .first()
+    try {
+      const user = await new User().where({ email, password }).fetch({
+        withRelated: ['plan'],
+      })
 
-    if (!user) {
+      return res.json(user)
+    } catch (e) {
       return res.status(404).json({
         message: 'Conta não encontrada.',
       })
     }
-
-    return res.json(user)
-
-    res.json({
-      data: user,
-    })
   },
 
   register: async (req, res) => {
     const { name, email, password } = req.body
 
-    const userExists = await db('users').where({ email }).first()
+    try {
+      await new User().save({ name, email, password })
 
-    if (userExists) {
+      return res.sendStatus(201)
+    } catch (e) {
       return res.status(400).json({
         message: 'Este e-mail já está cadastrado.',
       })
     }
-
-    await db('users').insert({ name, email, password })
-
-    return res.sendStatus(201)
   },
 }
