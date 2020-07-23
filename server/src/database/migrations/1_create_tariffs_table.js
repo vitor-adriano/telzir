@@ -1,9 +1,8 @@
 module.exports.up = knex => {
   return knex.schema.createTable('tariffs', table => {
     table.increments('id').primary()
-    table.string('from').notNullable()
-    table.string('to').notNullable()
-    table.float('price_per_minute').notNullable()
+    table.string('code').notNullable().unique()
+    table.json('destinations').notNullable()
   })
 }
 
