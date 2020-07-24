@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const User = require('../models/user')
 
 module.exports = async (req, res, next) => {
   const { authorization } = req.headers
@@ -12,7 +13,11 @@ module.exports = async (req, res, next) => {
   const [, token] = authorization.split(' ')
 
   try {
-    const verify = await jwt.verify(token, process.env.APP_KEY)
+    const { id } = await jwt.verify(token, process.env.APP_KEY)
+
+    req.user = await new User({ id }).fetch({
+      withRelated: ['plan'],
+    })
 
     return next()
   } catch (e) {

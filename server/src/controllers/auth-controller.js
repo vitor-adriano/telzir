@@ -7,9 +7,7 @@ module.exports = {
     const { email, password } = req.body
 
     try {
-      const user = await new User().where({ email }).fetch({
-        withRelated: ['plan'],
-      })
+      const user = await new User().where({ email }).fetch()
 
       const validPassword = await bcrypt.compare(
         password,

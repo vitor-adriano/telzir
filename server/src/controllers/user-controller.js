@@ -1,18 +1,16 @@
-const User = require('../models/user')
-
 module.exports = {
   update: async (req, res) => {
-    const { id, name, email, password } = req.body
+    const { name, email } = req.body
 
-    await new User({ id }).save({ name, email, password })
+    req.user.save({ name, email })
 
     return res.sendStatus(200)
   },
 
   updatePlan: async (req, res) => {
-    const { id, plan_id } = req.body
+    const { plan_id } = req.body
 
-    await new User({ id }).save({ plan_id })
+    req.user.save({ plan_id })
 
     return res.sendStatus(200)
   },
