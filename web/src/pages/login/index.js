@@ -1,10 +1,13 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { get } from 'lodash'
 import immer from 'immer'
+
+import api from 'services/api'
 
 const Login = ({ location, history }) => {
   const [state, setState] = React.useState(() => {
-    const { email } = location.state || ''
+    const email = get(location, 'state.email') || ''
     return {
       email,
       password: '',
@@ -23,7 +26,13 @@ const Login = ({ location, history }) => {
   const handleSubmit = async event => {
     event.preventDefault()
 
-    history.push({ pathname: '/dashboard', state: { welcome: true } })
+    try {
+      const response = await api.post('/login', state)
+      localStorage.setItem('_token', JSON.stringify(response.data))
+      history.push({ pathname: '/dashboard', state: { welcome: true } })
+    } catch (e) {
+      //
+    }
   }
 
   return (
@@ -57,6 +66,8 @@ const Login = ({ location, history }) => {
             <button type="submit">Conectar</button>
           </div>
         </form>
+
+        <pre>{JSON.stringify(state, null, 2)}</pre>
       </div>
     </div>
   )
