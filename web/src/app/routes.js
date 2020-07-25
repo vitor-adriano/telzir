@@ -2,6 +2,8 @@ import React from 'react'
 import { Switch, Route as BaseRoute, Redirect } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
+import ApplicationTemplate from 'components/templates/application'
+
 import Login from 'pages/login'
 import Register from 'pages/register'
 import Dashboard from 'pages/dashboard'
@@ -15,7 +17,9 @@ const Route = ({ component: Component, isPrivate, ...baseProps }) => {
       render={props => {
         return isPrivate ? (
           isAuthenticated ? (
-            <Component {...props} />
+            <ApplicationTemplate>
+              <Component {...props} />
+            </ApplicationTemplate>
           ) : (
             <Redirect to="/login" />
           )
