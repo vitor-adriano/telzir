@@ -1,15 +1,20 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
 import { get } from 'lodash'
 import immer from 'immer'
 
-import api from 'services/api'
+import { loginUser } from 'actions/user'
 
 const Login = ({ location, history }) => {
+  const dispatch = useDispatch()
+  const { isFetching, errorMessage } = useSelector(state => state.user)
+
+  const emailFromRegister = () => get(location, 'state.email') || ''
+
   const [state, setState] = React.useState(() => {
-    const email = get(location, 'state.email') || ''
     return {
-      email,
+      email: emailFromRegister(),
       password: '',
     }
   })
@@ -23,16 +28,10 @@ const Login = ({ location, history }) => {
     )
   }
 
-  const handleSubmit = async event => {
+  const handleSubmit = event => {
     event.preventDefault()
 
-    try {
-      const response = await api.post('/login', state)
-      localStorage.setItem('_token', JSON.stringify(response.data))
-      history.push({ pathname: '/dashboard', state: { welcome: true } })
-    } catch (e) {
-      //
-    }
+    dispatch(loginUser(state))
   }
 
   return (
@@ -44,6 +43,7 @@ const Login = ({ location, history }) => {
           <div>
             <strong>E-mail</strong>
             <input
+              autoFocus={!emailFromRegister()}
               type="email"
               name="email"
               value={state.email}
@@ -54,6 +54,7 @@ const Login = ({ location, history }) => {
           <div>
             <strong>Senha</strong>
             <input
+              autoFocus={emailFromRegister()}
               type="password"
               name="password"
               value={state.password}
@@ -61,13 +62,19 @@ const Login = ({ location, history }) => {
             />
           </div>
 
+          {!!errorMessage && (
+            <div>
+              <span>{errorMessage}</span>
+            </div>
+          )}
+
           <div>
             <Link to="/register">Quero me cadastrar!</Link>
-            <button type="submit">Conectar</button>
+            <button type="submit" disabled={isFetching}>
+              Conectar
+            </button>
           </div>
         </form>
-
-        <pre>{JSON.stringify(state, null, 2)}</pre>
       </div>
     </div>
   )
