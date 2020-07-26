@@ -7,6 +7,7 @@ import ApplicationTemplate from 'components/templates/application'
 import Login from 'pages/login'
 import Register from 'pages/register'
 import Dashboard from 'pages/dashboard'
+import Prices from 'pages/prices'
 
 const Route = ({ component: Component, isPrivate, ...baseProps }) => {
   const { isAuthenticated } = useSelector(state => state.user)
@@ -41,6 +42,7 @@ const Routes = () => {
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
       <Route isPrivate path="/dashboard" component={Dashboard} />
+      <Route isPrivate path="/prices" component={Prices} />
     </Switch>
   )
 }

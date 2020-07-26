@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { has } from 'lodash'
 
 const Dashboard = ({ location }) => {
@@ -25,6 +26,8 @@ const Dashboard = ({ location }) => {
 
         <div>
           <span>Você não contratou nenhum de nossos planos.</span>
+
+          <Link to="/prices">Ver planos</Link>
         </div>
       </div>
     </div>
