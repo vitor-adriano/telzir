@@ -7,7 +7,9 @@ module.exports = {
     const { email, password } = req.body
 
     try {
-      const user = await new User().where({ email }).fetch()
+      const user = await new User().where({ email }).fetch({
+        withRelated: ['plan'],
+      })
 
       const validPassword = await bcrypt.compare(
         password,
@@ -16,7 +18,7 @@ module.exports = {
 
       if (!validPassword) throw new Error()
 
-      return res.send(jwt.sign(user.omit(['password']), process.env.APP_KEY))
+      return res.send(jwt.sign(user.toJSON(), process.env.APP_KEY))
     } catch (e) {
       return res.status(404).json({
         message: 'E-mail ou senha incorretos.',
