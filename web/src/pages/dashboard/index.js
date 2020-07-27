@@ -1,33 +1,33 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { has } from 'lodash'
+import { useSelector } from 'react-redux'
 
-const Dashboard = ({ location }) => {
-  React.useEffect(() => {
-    const boot = async () => {
-      // TODO: get user plan info
-    }
-
-    boot()
-  }, [])
+const Dashboard = () => {
+  const { name, plan } = useSelector(state => state.user.user)
 
   return (
     <div>
-      <h3>Início</h3>
-
-      {has(location, 'state.welcome') && (
-        <div>
-          <span>Bem-vindo, seu nome.</span>
-        </div>
-      )}
+      <div>
+        <span>Bem-vindo, {name}</span>
+      </div>
 
       <div>
         <h3>Meu Plano</h3>
 
         <div>
-          <span>Você não contratou nenhum de nossos planos.</span>
+          <div>
+            {plan ? (
+              <>
+                <h3>{plan.name}</h3>
+                <span>{plan.free_minutes} minutos gratuitos.</span>
+              </>
+            ) : (
+              <span>Você não contratou nenhum de nossos planos.</span>
+            )}
+          </div>
 
-          <Link to="/prices">Ver planos</Link>
+          <Link to="/prices">{plan ? 'Trocar plano' : 'Ver planos'}</Link>
         </div>
       </div>
     </div>
