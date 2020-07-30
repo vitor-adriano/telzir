@@ -1,6 +1,10 @@
 import React from 'react'
 import immer from 'immer'
-import { find } from 'lodash'
+
+import AvailablePlans from 'components/available-plans'
+import { Header } from 'components/typo'
+import Card from 'components/card'
+import Input from 'components/input'
 
 import api from 'services/api'
 
@@ -12,58 +16,28 @@ const Prices = () => {
   })
 
   const [state, setState] = React.useState({
-    origin: 0,
-    destination: 0,
-    minutes: 1,
+    origin: '0',
+    destination: '0',
+    minutes: '20',
   })
 
-  const handleOrigin = event => {
-    const { value } = event.target
+  const handleChange = event => {
+    const { name, value } = event.target
     setState(
       immer(draft => {
-        draft.origin = Number(value)
-        draft.destination = 0
-      })
-    )
-  }
+        draft[name] = value
 
-  const handleDestination = event => {
-    const { value } = event.target
-    setState(
-      immer(draft => {
-        draft.destination = Number(value)
-      })
-    )
-  }
-
-  const handleMinutes = event => {
-    const { value } = event.target
-    setState(
-      immer(draft => {
-        draft.minutes = Number(value)
+        if (name === 'origin') {
+          draft.destination = '0'
+        }
       })
     )
   }
 
   const availableDestinations = React.useMemo(() => {
-    const origin = find(data.tariffs, ({ id }) => id === state.origin) || {}
-    return origin.destinations
+    const response = data.tariffs[state.origin] || {}
+    return response.destinations
   }, [data.tariffs, state.origin])
-
-  const calcPrice = React.useCallback(
-    (freeMinutes = 0) => {
-      const pricePerMinute = find(data.tariffs, ({ id }) => id === state.origin)
-        .destinations[state.destination].price
-      const exceededMinutes = Math.max(freeMinutes, state.minutes) - freeMinutes
-      const totalValue =
-        exceededMinutes * pricePerMinute * (freeMinutes ? 1.1 : 1)
-      return totalValue.toLocaleString('pt-br', {
-        style: 'currency',
-        currency: 'BRL',
-      })
-    },
-    [data.tariffs, state, availableDestinations]
-  )
 
   React.useEffect(() => {
     const boot = async () => {
@@ -85,80 +59,55 @@ const Prices = () => {
   }, [])
 
   return data.fetched ? (
-    <div>
-      <h3>Preços</h3>
+    <>
+      <Header>Comparar preços</Header>
 
-      <div>
-        <strong>DDD de origem</strong>
-        <select defaultValue={0} onChange={handleOrigin}>
-          <option value={0} disabled>
-            Selecione uma opção
-          </option>
-          {data.tariffs.map(({ id, code }, i) => (
-            <option key={i} value={id}>
+      <Card>
+        <Input.Label>DDD de origem</Input.Label>
+        <Input.Select
+          name="origin"
+          value={state.origin}
+          onChange={handleChange}>
+          {data.tariffs.map(({ code }, i) => (
+            <option key={i} value={i}>
               {code}
             </option>
           ))}
-        </select>
-      </div>
+        </Input.Select>
 
-      {!!state.origin && (
-        <div>
-          <strong>DDD de destino</strong>
-          <select defaultValue={0} onChange={handleDestination}>
-            {availableDestinations.map(({ code }, i) => (
-              <option key={i} value={i}>
-                {code}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
+        <Input.Label>DDD de destino</Input.Label>
+        <Input.Select
+          name="destination"
+          value={state.destination}
+          onChange={handleChange}>
+          {availableDestinations.map(({ code, price }, i) => (
+            <option key={i} value={i}>
+              {code} (
+              {price.toLocaleString('pt-br', {
+                style: 'currency',
+                currency: 'BRL',
+              }) + ' por minuto'}
+              )
+            </option>
+          ))}
+        </Input.Select>
 
-      {!!state.origin && (
-        <div>
-          <strong>Minutos em ligações</strong>
-          <input
-            type="number"
-            min={1}
-            value={state.minutes}
-            onChange={handleMinutes}
-          />
-        </div>
-      )}
+        <Input.Label>Minutos em ligações</Input.Label>
+        <Input.Text
+          type="number"
+          min="1"
+          name="minutes"
+          value={state.minutes}
+          onChange={handleChange}
+        />
+      </Card>
 
-      {!!state.origin && (
-        <table style={{ border: '1px solid' }}>
-          <thead>
-            <tr>
-              <th>Sem plano</th>
-              {data.plans.map(plan => (
-                <th key={plan.id}>{plan.name}</th>
-              ))}
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr>
-              <td>{calcPrice()}</td>
-              {data.plans.map((plan, i) => (
-                <td key={i}>{calcPrice(plan.free_minutes)}</td>
-              ))}
-            </tr>
-          </tbody>
-
-          <tfoot>
-            <tr>
-              <td />
-              <td colSpan={data.plans.length}>
-                Total referente a 10% do valor do minuto excedente do limite da
-                promoção.
-              </td>
-            </tr>
-          </tfoot>
-        </table>
-      )}
-    </div>
+      <AvailablePlans
+        price={availableDestinations[state.destination].price}
+        minutes={state.minutes}
+        plans={data.plans}
+      />
+    </>
   ) : (
     <div>
       <span>Carregando informações</span>

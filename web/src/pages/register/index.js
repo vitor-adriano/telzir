@@ -2,6 +2,12 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import immer from 'immer'
 
+import AuthenticationTemplate from 'components/templates/authentication'
+import { Header } from 'components/typo'
+import Card from 'components/card'
+import Button from 'components/button'
+import Input from 'components/input'
+
 import api from 'services/api'
 
 const Login = ({ history }) => {
@@ -36,58 +42,50 @@ const Login = ({ history }) => {
   }
 
   return (
-    <div>
-      <div>
-        <h2>Cadastrar</h2>
+    <AuthenticationTemplate>
+      <Card>
+        <Header>Cadastrar</Header>
 
         <form onSubmit={handleSubmit}>
-          <div>
-            <strong>Nome</strong>
-            <input
-              type="text"
-              name="name"
-              value={state.name}
-              onChange={handleChange}
-            />
-          </div>
+          <Input.Text
+            autoFocus
+            placeholder="Nome completo"
+            type="text"
+            name="name"
+            value={state.name}
+            onChange={handleChange}
+          />
 
-          <div>
-            <strong>E-mail</strong>
-            <input
-              type="email"
-              name="email"
-              value={state.email}
-              onChange={handleChange}
-            />
-          </div>
+          <Input.Text
+            placeholder="E-mail"
+            type="email"
+            name="email"
+            value={state.email}
+            onChange={handleChange}
+          />
 
-          <div>
-            <strong>Senha</strong>
-            <input
-              type="password"
-              name="password"
-              value={state.password}
-              onChange={handleChange}
-            />
-          </div>
+          <Input.Text
+            placeholder="Senha"
+            type="password"
+            name="password"
+            value={state.password}
+            onChange={handleChange}
+          />
 
-          <div>
-            <strong>Confirmar Senha</strong>
-            <input
-              type="password"
-              name="confirm_password"
-              value={state.confirm_password}
-              onChange={handleChange}
-            />
-          </div>
+          <Input.Text
+            placeholder="Confirmar senha"
+            type="password"
+            name="confirm_password"
+            value={state.confirm_password}
+            onChange={handleChange}
+          />
 
-          <div>
-            <Link to="/login">Já possuo uma conta.</Link>
-            <button type="submit">Cadastrar</button>
-          </div>
+          <Button submit>Cadastrar</Button>
+
+          <Link to="/login">Já possuo uma conta.</Link>
         </form>
-      </div>
-    </div>
+      </Card>
+    </AuthenticationTemplate>
   )
 }
 

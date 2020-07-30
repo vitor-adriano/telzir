@@ -5,6 +5,11 @@ import { get } from 'lodash'
 import immer from 'immer'
 
 import { loginUser } from 'actions/user'
+import AuthenticationTemplate from 'components/templates/authentication'
+import { Header, Warning } from 'components/typo'
+import Card from 'components/card'
+import Button from 'components/button'
+import Input from 'components/input'
 
 const Login = ({ location, history }) => {
   const dispatch = useDispatch()
@@ -35,48 +40,39 @@ const Login = ({ location, history }) => {
   }
 
   return (
-    <div>
-      <div>
-        <h2>Conectar</h2>
+    <AuthenticationTemplate>
+      <Card>
+        <Header>Entrar</Header>
 
         <form onSubmit={handleSubmit}>
-          <div>
-            <strong>E-mail</strong>
-            <input
-              autoFocus={!emailFromRegister()}
-              type="email"
-              name="email"
-              value={state.email}
-              onChange={handleChange}
-            />
-          </div>
+          <Input.Text
+            autoFocus={!emailFromRegister()}
+            placeholder="E-mail"
+            type="email"
+            name="email"
+            value={state.email}
+            onChange={handleChange}
+          />
 
-          <div>
-            <strong>Senha</strong>
-            <input
-              autoFocus={emailFromRegister()}
-              type="password"
-              name="password"
-              value={state.password}
-              onChange={handleChange}
-            />
-          </div>
+          <Input.Text
+            autoFocus={emailFromRegister()}
+            placeholder="Senha"
+            type="password"
+            name="password"
+            value={state.password}
+            onChange={handleChange}
+          />
 
-          {!!errorMessage && (
-            <div>
-              <span>{errorMessage}</span>
-            </div>
-          )}
+          {!!errorMessage && <Warning>{errorMessage}</Warning>}
 
-          <div>
-            <Link to="/register">Quero me cadastrar!</Link>
-            <button type="submit" disabled={isFetching}>
-              Conectar
-            </button>
-          </div>
+          <Button submit disabled={isFetching}>
+            Conectar
+          </Button>
+
+          <Link to="/register">Quero me cadastrar!</Link>
         </form>
-      </div>
-    </div>
+      </Card>
+    </AuthenticationTemplate>
   )
 }
 
