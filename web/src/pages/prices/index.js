@@ -60,7 +60,7 @@ const Prices = () => {
 
   return data.fetched ? (
     <>
-      <Header>Comparar preços</Header>
+      <Header goBack>Comparar preços</Header>
 
       <Card>
         <Input.Label>DDD de origem</Input.Label>
