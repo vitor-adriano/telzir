@@ -6,7 +6,7 @@ import UserPlan from 'components/user-plan'
 import { Header } from 'components/typo'
 
 const Dashboard = () => {
-  const { name, plan } = useSelector(state => state.user.user)
+  const { name, plan_id, plan } = useSelector(state => state.user.user)
 
   return (
     <>
@@ -14,7 +14,7 @@ const Dashboard = () => {
 
       <Header>Meu plano</Header>
 
-      <UserPlan plan={plan} />
+      <UserPlan id={plan_id} plan={plan} />
     </>
   )
 }

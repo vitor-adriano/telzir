@@ -26,7 +26,7 @@ export default styled.div`
       color: #666;
       text-align: center;
 
-      & > h3 {
+      & h3 {
         font-size: 16px;
         text-transform: uppercase;
 

@@ -4,11 +4,11 @@ import { Link } from 'components/button'
 
 import StyledComponent from './styles'
 
-const UserPlan = ({ plan }) => {
+const UserPlan = ({ id, plan }) => {
   return (
     <StyledComponent>
       <div>
-        {plan ? (
+        {id && plan ? (
           <>
             <h3>{plan.name}</h3>
             <span>{plan.free_minutes} minutos gratuitos</span>
