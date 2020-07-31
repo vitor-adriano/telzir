@@ -4,7 +4,7 @@ import { MdNavigateBefore } from 'react-icons/md'
 
 import { StyledHeader } from './styles'
 
-const Header = ({ goBack, ...props }) => {
+const Header = ({ goBack, children, ...props }) => {
   return (
     <StyledHeader>
       {goBack && (
@@ -13,7 +13,7 @@ const Header = ({ goBack, ...props }) => {
         </Link>
       )}
 
-      <h2 {...props} />
+      <h2 {...props}>{children}</h2>
     </StyledHeader>
   )
 }

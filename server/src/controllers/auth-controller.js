@@ -20,7 +20,7 @@ module.exports = {
 
       return res.send(jwt.sign(user.toJSON(), process.env.APP_KEY))
     } catch (e) {
-      return res.status(404).json({
+      return res.status(422).json({
         message: 'E-mail ou senha incorretos.',
       })
     }
@@ -29,14 +29,8 @@ module.exports = {
   register: async (req, res) => {
     const { name, email, password } = req.body
 
-    try {
-      await new User().save({ name, email, password })
+    await new User().save({ name, email, password })
 
-      return res.sendStatus(201)
-    } catch (e) {
-      return res.status(400).json({
-        message: 'Este e-mail já está cadastrado.',
-      })
-    }
+    return res.sendStatus(201)
   },
 }

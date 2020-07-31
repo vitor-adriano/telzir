@@ -40,6 +40,6 @@ export const StyledWarning = styled.span`
   color: var(--secondary);
 
   ${StyledInput} + & {
-    margin-top: -10px;
+    margin-top: -15px;
   }
 `
