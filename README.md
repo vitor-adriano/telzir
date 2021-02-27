@@ -34,7 +34,7 @@ Teste realizado utilizando ReactJS para a construção da interface, NodeJS para
 No terminal, clone o repositório:
 
 ```
-git clone https://github.com/vitor-adriano/loldesign-telzir
+git clone https://github.com/oVitorAdriano/telzir
 ```
 
 Após finalizar o processo, no diretório raiz, instale as dependências:
